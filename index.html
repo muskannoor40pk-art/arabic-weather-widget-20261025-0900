@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة حالة الطقس</title>
+    
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="container">
+    <div class="search-box">
+        <input type="text" id="cityInput" placeholder="ابحث عن مدينة (مثلاً: دبي)...">
+        <button onclick="updateWeather()">بحث</button>
+    </div>
+
+    <div id="weatherDisplay">
+        <div class="card current-weather">
+            <h1 id="cityName">دبي</h1>
+            <div class="temp" id="currentTemp">٣٢°</div>
+            <p class="condition" id="currentCond">مشمس جزئياً</p>
+        </div>
+
+        <div class="card">
+            <h2>التوقعات الساعية</h2>
+            <div class="hourly-scroll" id="hourlyContainer"></div>
+        </div>
+
+        <div class="card">
+            <h2>توقعات الخمسة أيام</h2>
+            <ul class="forecast-list" id="forecastList"></ul>
+        </div>
+    </div>
+</div>
+
+<script>
+    const demoData = {
+        "دبي": {
+            temp: "٣٢°",
+            cond: "مشمس",
+            hourly: [
+                { time: "١٢ م", temp: "٣٢°" }, { time: "١ م", temp: "٣٣°" },
+                { time: "٢ م", temp: "٣٤°" }, { time: "٣ م", temp: "٣٤°" },
+                { time: "٤ م", temp: "٣٣°" }
+            ],
+            daily: [
+                { day: "الاثنين", temp: "٣٤°/٢٦°" }, { day: "الثلاثاء", temp: "٣٣°/٢٥°" },
+                { day: "الأربعاء", temp: "٣٢°/٢٤°" }, { day: "الخميس", temp: "٣٥°/٢٦°" },
+                { day: "الجمعة", temp: "٣٦°/٢٧°" }
+            ]
+        }
+    };
+
+    function updateWeather() {
+        const city = document.getElementById('cityInput').value || "دبي";
+        const data = demoData[city] || demoData["دبي"];
+        
+        document.getElementById('cityName').innerText = city;
+        document.getElementById('currentTemp').innerText = data.temp;
+        document.getElementById('currentCond').innerText = data.cond;
+        
+        const hourlyContainer = document.getElementById('hourlyContainer');
+        hourlyContainer.innerHTML = data.hourly.map(h => `
+            <div class="hour-item">
+                <div>${h.time}</div>
+                <div style="font-weight:bold">${h.temp}</div>
+            </div>
+        `).join('');
+        
+        const forecastList = document.getElementById('forecastList');
+        forecastList.innerHTML = data.daily.map(d => `
+            <li class="forecast-item">
+                <span>${d.day}</span>
+                <span>${d.temp}</span>
+            </li>
+        `).join('');
+    }
+
+    // Initial Load
+    updateWeather();
+</script>
+
+</body>
+</html>
